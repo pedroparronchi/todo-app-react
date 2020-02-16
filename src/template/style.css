@@ -1,0 +1,16 @@
+.btn {
+    margin-right: 5px;
+}
+
+.mark-as-done {
+    text-decoration: line-through;
+    color: #777
+}
+
+.table-btn-group {
+    width: 105px;
+}
+
+.todo-form {
+    padding-bottom: 70px;
+}
