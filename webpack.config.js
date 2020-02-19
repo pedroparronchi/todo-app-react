@@ -1,7 +1,10 @@
+const modoDev = process.env.NODE_ENV !== 'production';
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptmizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
+    mode: modoDev ? 'development' : 'production',
     entry: './src/index.jsx',
     output: {
         path: __dirname + '/public',
@@ -12,16 +15,23 @@ module.exports = {
         contentBase: './public',
     },
     resolve: {
-        extensions: ['', '.js', '.jsx'],
+        extensions: ['.js', '.jsx'],
         alias: {
             modules: __dirname + '/node_modules'
         }
     },
     plugins: [ 
-        new ExtractTextPlugin('app.css')
+        new MiniCssExtractPlugin({
+            filename: "app.css"
+        })
     ],
+    optimization: {
+        minimizer: [
+            new OptmizeCSSAssetsPlugin({})
+        ]
+    },
     module: {
-        loaders: [{
+        rules: [{
             test: /.js[x]?$/,
             loader: 'babel-loader',
             exclude: /node_modules/,
@@ -30,11 +40,19 @@ module.exports = {
                 plugins: ['transform-object-rest-spread']
             }
         }, {
-            test: /\.css$/,
-            loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+            test: /\.s?[ac]ss$/,
+            use: [
+                MiniCssExtractPlugin.loader,
+                //'style-loader', // adiciona CSS a DOM injetando a tag <style>
+                'css-loader', // interpreta @import, url()...
+                'sass-loader',
+            ]
         }, {
             test: /\.woff|.woff2|.ttf|.eot|.svg*.*$/,
-            loader: 'file'
+            use: ['file-loader']
+        }, {
+            test: /\.(png|svg|jpg|gif)$/,
+            use: ['file-loader']
         }]
     }
 }
