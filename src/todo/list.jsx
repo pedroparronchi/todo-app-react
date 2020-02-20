@@ -1,7 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
+
 import Button from '../template/button'
 
-export default props => {
+const List = props => {
 
     const renderRows = () => {
         const list = props.list || [];
@@ -37,3 +40,9 @@ export default props => {
         </table>
     )
 }
+
+// mapeia os estados com as propriedades do objeto
+const mapStateToProps = state => ({list: state.todo.list}) // vem do reducer.js
+
+// exportar o component List só que decorado (connect) - padrão de projeto decorator
+export default connect(mapStateToProps) (List)
