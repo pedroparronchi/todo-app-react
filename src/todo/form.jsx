@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { changeDescription, search, add } from './actions'
 import Grid from '../template/grid'
 import Button from '../template/button'
+import { changeDescription, search, add, clear } from './actions'
 
 
 class Form extends Component {
@@ -14,11 +14,11 @@ class Form extends Component {
     }
 
     keyHandler(e) {
-        const { add, search, description } = this.props //extrair atributos de
+        const { add, search, description, clear } = this.props //extrair atributos de
         if(e.key == 'Enter') {
             e.shiftKey ? search() : add(description)
         } else if(e.key == 'Escape') {
-            props.clear();
+            clear();
         }
     }
 
@@ -27,7 +27,7 @@ class Form extends Component {
     }
 
     render() {
-        const { add, search, description } = this.props //extrair atributos de
+        const { add, search, description, clear } = this.props //extrair atributos de
         return (
             <div role='form' className="todo-form">
                 <Grid cols='10 9 10'>
@@ -35,16 +35,16 @@ class Form extends Component {
                         placeholder='Adicione uma tarefa'
                         onChange={this.props.changeDescription}
                         onKeyUp={this.keyHandler}
-                        value={this.props.description}></input>
+                        value={description}></input>
                 </Grid>
         
                 <Grid cols='1 3 2'>
                     <Button style='primary' icon='plus'
                         onClick={() => add(description)}></Button>
                     <Button style='info' icon='search'
-                        onClick={() => search()}></Button>
+                        onClick={search}></Button>
                     <Button style='default' icon='undo'
-                        onClick={this.props.clear}></Button>
+                        onClick={clear}></Button>
                 </Grid>
             </div>
         )
@@ -62,7 +62,8 @@ const mapDispatchToProps = dispatch =>
     bindActionCreators ({
         changeDescription,
         search,
-        add
+        add,
+        clear
     }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)

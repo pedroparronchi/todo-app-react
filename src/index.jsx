@@ -14,6 +14,7 @@ import reducers from './main/reducers'
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION__ 
     && window.__REDUX_DEVTOOLS_EXTENSION__()
 
+// não estou usando mais o promise
 const store = applyMiddleware(multi, thunk, promise) (createStore) (reducers, devTools)
 
 ReactDOM.render(
